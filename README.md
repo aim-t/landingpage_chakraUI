@@ -1,5 +1,8 @@
 # landingpage_chakraUI
 
+#### [Live Site](https://loremagency.netlify.app/)
+<img src="./public/preview.png" alt="agency landing page" />
+
 # React Landing Page for Agency
 
 A responsive landing page for an agency built with React, utilizing Chakra UI.
@@ -48,4 +51,3 @@ Contributions are welcome! If you find any issues or have suggestions for improv
 
 - Chakra UI for providing the foundational components and templates.
 - Vite for the fast and efficient development environment.
-- Stack Overflow and online tutorials for code snippets and guidance.
