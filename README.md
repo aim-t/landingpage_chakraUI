@@ -1,7 +1,7 @@
 # landingpage_chakraUI
 
 #### [Live Site](https://loremagency.netlify.app/)
-<img src="./public/preview.png" alt="agency landing page" />
+#### [Preview](./public/preview.png)
 
 # React Landing Page for Agency
 
