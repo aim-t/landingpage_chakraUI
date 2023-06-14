@@ -12,6 +12,7 @@ import {
     PopoverTrigger,
     PopoverContent,
     useColorModeValue,
+    useColorMode,
     useBreakpointValue,
     useDisclosure,
   } from '@chakra-ui/react';
@@ -21,28 +22,82 @@ import {
     ChevronDownIcon,
     ChevronRightIcon,
   } from '@chakra-ui/icons';
+  import { 
+    BsSun,
+    BsMoonStarsFill 
+  } from 'react-icons/bs';
+
   import { Logo } from './Footer';
+  // import './navstyle.css';
+  import { useEffect, useState, useRef } from 'react';
   
-  export default function Navbar() {
+  export default function Navbar(props) {
     const { isOpen, onToggle } = useDisclosure();
+    const { colorMode, toggleColorMode } = useColorMode();
+
+    const handleToggle = () => {
+      onToggle();
+    };
+
+    const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+    const prevScrollY = useRef(0);
   
+    useEffect(() => {
+      const handleScroll = () => {
+        const currentScrollY = window.scrollY;
+  
+        if (currentScrollY > prevScrollY.current) {
+          // Scrolling down
+          setIsHeaderVisible(false);
+        } else {
+          // Scrolling up
+          setIsHeaderVisible(true);
+        }
+  
+        prevScrollY.current = currentScrollY;
+      };
+  
+      window.addEventListener("scroll", handleScroll);
+  
+      return () => {
+        window.removeEventListener("scroll", handleScroll);
+      };
+    }, []);
+
+    const headerStyle = {
+      transform: isHeaderVisible ? "translateY(0)" : "translateY(-200px)",
+    };
+
+
     return (
       <Box>
         <Flex
           bg={useColorModeValue('white', 'gray.800')}
           color={useColorModeValue('gray.600', 'white')}
           minH={'60px'}
+          style={headerStyle}
           py={{ base: 2 }}
           px={{ base: 4 }}
           borderBottom={1}
           borderStyle={'solid'}
           borderColor={useColorModeValue('gray.200', 'gray.900')}
-          align={'center'}>
+          align={'center'}
+          zIndex={2}
+
+          position="fixed"
+          top={0}
+          left={0}
+          right={0}
+          transitionProperty="transform"
+          transitionDuration="0.8s"
+          transitionTimingFunction="ease-in-out"
+          >
           <Flex
             flex={{ base: 1, md: 'auto' }}
             ml={{ base: -2 }}
             display={{ base: 'flex', md: 'none' }}>
             <IconButton
+              mx={3}
               onClick={onToggle}
               icon={
                 isOpen ? <CloseIcon w={3} h={3} /> : <HamburgerIcon w={5} h={5} />
@@ -58,7 +113,9 @@ import {
               target='_blank'
               textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
               fontFamily={'heading'}
+              mx={2}
               color={useColorModeValue('gray.800', 'white')}>
+              
               <Logo />
             </Text>
   
@@ -77,21 +134,29 @@ import {
               fontSize={'sm'}
               fontWeight={400}
               variant={'link'}
-              href={'#'}>
+              href={'#sign-in'}>
               Sign In
-            </Button>
+            </Button>        
             <Button
               as={'a'}
               display={{ base: 'none', md: 'inline-flex' }}
               fontSize={'sm'}
               fontWeight={600}
               color={'white'}
-              bg={'pink.400'}
-              href={'#'}
+              bg={'orange.400'}
+              href={'#sign-up'}
               _hover={{
-                bg: 'pink.300',
+                bg: 'orange.300',
               }}>
               Sign Up
+            </Button>
+            <Button
+              aria-label="Toggle Color Mode"
+              onClick={toggleColorMode}
+              _focus={{ boxShadow: 'none' }}
+              w="fit-content"
+              {...props}>
+              {colorMode === 'light' ? <BsMoonStarsFill /> : <BsSun />}
             </Button>
           </Stack>
         </Flex>
@@ -150,44 +215,12 @@ import {
     );
   };
   
-  const DesktopSubNav = ({ label, href, subLabel }) => {
-    return (
-      <Link
-        href={href}
-        role={'group'}
-        display={'block'}
-        p={2}
-        rounded={'md'}
-        _hover={{ bg: useColorModeValue('pink.50', 'gray.900') }}>
-        <Stack direction={'row'} align={'center'}>
-          <Box>
-            <Text
-              transition={'all .3s ease'}
-              _groupHover={{ color: 'pink.400' }}
-              fontWeight={500}>
-              {label}
-            </Text>
-            <Text fontSize={'sm'}>{subLabel}</Text>
-          </Box>
-          <Flex
-            transition={'all .3s ease'}
-            transform={'translateX(-10px)'}
-            opacity={0}
-            _groupHover={{ opacity: '100%', transform: 'translateX(0)' }}
-            justify={'flex-end'}
-            align={'center'}
-            flex={1}>
-            <Icon color={'pink.400'} w={5} h={5} as={ChevronRightIcon} />
-          </Flex>
-        </Stack>
-      </Link>
-    );
-  };
   
   const MobileNav = () => {
     return (
       <Stack
         bg={useColorModeValue('white', 'gray.800')}
+        mt={5}
         p={4}
         display={{ md: 'none' }}>
         {NAV_ITEMS.map((navItem) => (
@@ -200,8 +233,15 @@ import {
   const MobileNavItem = ({ label, children, href }) => {
     const { isOpen, onToggle } = useDisclosure();
   
+    const handleItemClick = () => {
+      if(children){
+        onToggle();
+      }
+    
+    };
+
     return (
-      <Stack spacing={4} onClick={children && onToggle}>
+      <Stack spacing={4} onClick={handleItemClick}>
         <Flex
           py={2}
           as={Link}
@@ -250,41 +290,20 @@ import {
   
   const NAV_ITEMS = [
     {
-      label: 'Inspiration',
-      children: [
-        {
-          label: 'Explore Design Work',
-          subLabel: 'Trending Design to inspire you',
-          href: '#',
-        },
-        {
-          label: 'New & Noteworthy',
-          subLabel: 'Up-and-coming Designers',
-          href: '#',
-        },
-      ],
+      label: 'Services',
+      href: "#services"
     },
     {
-      label: 'Find Work',
-      children: [
-        {
-          label: 'Job Board',
-          subLabel: 'Find your dream design job',
-          href: '#',
-        },
-        {
-          label: 'Freelance Projects',
-          subLabel: 'An exclusive list for contract work',
-          href: '#',
-        },
-      ],
+      label: 'Pricing',
+      href: '#pricing',
     },
     {
-      label: 'Learn Design',
-      href: '#',
+      label: 'Careers',
+      href: "#careers"
     },
     {
-      label: 'Hire Designers',
-      href: '#',
+      label: 'Contact Us',
+      href: '#contact',
     },
   ];
+

@@ -1,14 +1,16 @@
 import {
+    Box,
     Flex,
     Container,
     Heading,
     Stack,
     Text,
     Button,
-    Icon,
+    Icon
   } from '@chakra-ui/react';
   
   export default function HeroSection() {
+
     return (
       <Container maxW={'5xl'}>
         <Stack
@@ -32,6 +34,8 @@ import {
           </Text>
           <Stack spacing={6} direction={'row'}>
             <Button
+              as="a"
+              href="#pricing"
               rounded={'full'}
               px={6}
               colorScheme={'orange'}
@@ -39,7 +43,11 @@ import {
               _hover={{ bg: 'orange.500' }}>
               Get started
             </Button>
-            <Button rounded={'full'} px={6}>
+            <Button 
+              as="a"
+              href="#services"
+              rounded={'full'} 
+              px={6}>
               Learn more
             </Button>
           </Stack>

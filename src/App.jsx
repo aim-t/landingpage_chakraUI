@@ -1,25 +1,24 @@
-import Contact from "./components/Contact";
-import Features from "./components/Features";
+import Contact from "./components/Careers";
+import Features from "./components/Services";
 import Footer from "./components/Footer";
 import HeroSection from "./components/HeroSection";
 import Navbar from "./components/Navbar";
-import Newsletter from "./components/Newsletter";
+import Pricing from "./components/Pricing";
 import Testimonials from "./components/Testimonials";
 
 
 function App() {
+  
 
   return (
     <>
       <Navbar />
       <HeroSection />
       <Features />
+      <Pricing/>
       <Testimonials />
-      {/* <Newsletter /> */}
       <Contact />
       <Footer />
-
-
     </>
   )
 }
